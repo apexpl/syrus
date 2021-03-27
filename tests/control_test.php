@@ -19,7 +19,7 @@ class control_test extends TestCase
     {
 
         // Start Syrus
-        $syrus = new Syrus();
+        $syrus = new Syrus(null);
         $syrus->assign('userid', 5);
 
         // Check true

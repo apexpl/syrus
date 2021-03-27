@@ -274,7 +274,7 @@ class t_phone implements TagInterface
         $replace = [
             '~placeholder~' => $placeholder != '' ? 'placeholder="' . $placeholder . '"' : '', 
             '~country_code_options~' => $country_options, 
-            '~value~' => $phone
+            '~phone~' => $phone
         ];
 
         // Return

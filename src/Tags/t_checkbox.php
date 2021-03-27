@@ -22,11 +22,13 @@ class t_checkbox implements TagInterface
         // Set is_checked variables
         $is_checked = $e->getAttr('is_checked') ?? 0;
         $onclick = $e->getAttr('onclick') ?? '';
+        $name = $e->getAttr('name');
 
         // Set replace
         $replace = [
             '~chk~' => $is_checked == 1 ? 'checked="checked"' : '', 
-            'onclick' => $onclick != '' ? "onclick=\"$onclick\"" : ''
+            '~label~' => $e->getAttr('label') ?? ucwords(str_replace('_', ' ', $name)), 
+            '~onclick~' => $onclick != '' ? "onclick=\"$onclick\"" : ''
         ];
 
         // Replace and return

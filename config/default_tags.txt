@@ -99,7 +99,7 @@
 
 [[checkbox]]
 @required(name)
-@default(is_checked=0, label=No Label)
+@default(is_checked=0)
 <input type="checkbox" name="~name~" value="~value~" class="form-control" ~chk~ ~onclick~> <span>~label~</span><br />
 
 
@@ -125,7 +125,7 @@
     <select name="~name~_country" class="form-control col-lg-2">
         ~country_code_options~
     </select> 
-    <input type="text" name="~name~" value="~value~" class="form-control col-lg-10"  ~placeholder~>
+    <input type="text" name="~name~" value="~phone~" class="form-control col-lg-10"  ~placeholder~>
 </div>
 
 
@@ -247,20 +247,20 @@
 <span><i class="~icon~"></i> ~message~</span><br />
 
 [[callouts.css]]
-[
+{
     "success": "success", 
     "error": "danger", 
     "warning": "warning", 
     "info": "info"
-]
+}
 
 [[callouts.icon]]
-[
+{
     "success": "fa fa-check", 
     "error": "fa fa-ban", 
     "warning": "fa fa-warning", 
     "info": "fa fa-info"
-]
+}
 
 
 /**
@@ -283,12 +283,12 @@
 </div>
 
 [[tab_control.nav_item]]
-@required(num, name)
+@required(tab_num, name)
 <li class="~active~"><a href="#tab~tab_num~" data-toggle="tab">~name~</a></li>
 
 
 [[tab_control.page]]
-@required(num)
+@required(tab_num)
 <div class="tab-pane ~active~" id="tab~tab_num~">
     ~contents~
 </div>

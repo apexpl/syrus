@@ -25,6 +25,7 @@ class t_tab_control implements TagInterface
         list($tab_num, $nav_html, $page_html) = [1, '', ''];
         $active_tab = $e->getAttr('active_tab') ?? 1;
         $tags = Di::get(Tags::class);
+        $active_html = $tags->getSnippet('tab_control.css_active', '', []);
 
         // Go through tab pages
         $tab_pages = $e->getChildren('tab_page');
@@ -32,14 +33,15 @@ class t_tab_control implements TagInterface
 
             // Get nav html
             $nav_attr = [
-                'num' => $tab_num, 
+                'tab_num' => $tab_num, 
+                'active' => $tab_num == $active_tab ? $active_html : '', 
                 'name' => $pg->getAttr('name') ?? "Unnamed $tab_num"
             ];
             $nav_html .= $tags->getSnippet('tab_control.nav_item', '', $nav_attr);
 
             // Get page html
             $page_attr = [
-                'num' => $tab_num, 
+                'tab_num' => $tab_num, 
                 'active' => $active_tab == $tab_num ? $tags->getSnippet('tab_control.css_active', '', []) : ''
             ];
             $page_html .= $tags->getSnippet('tab_control.page', $pg->getBody(), $page_attr);

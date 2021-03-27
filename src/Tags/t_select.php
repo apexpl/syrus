@@ -12,7 +12,7 @@ use Apex\Syrus\Interfaces\TagInterface;
 /**
  * Renders a specific template tag.  Please see developer documentation for details.
  */
-class t_ft_seperator implements TagInterface
+class t_select implements TagInterface
 {
 
     /**
@@ -21,14 +21,21 @@ class t_ft_seperator implements TagInterface
     public function render(string $html, StackElement $e):string
     {
 
-        // Get contents
-        $tags = Di::get(Tags::class);
-        $contents = $e->getAttr('label') ?? 'No Label';
+        // Initialize
+        $onchange = $e->getAttr('onchange') ?? '';
+        $width = $e->getAttr('width') ?? '';
+
+        // Set replace
+        $replace = [
+            '~onchange~' => $onchange != '' ? 'onchange="' . $onchange . '"' : '', 
+            '~width~' => $width != '' ? 'style="width: ' . $width . ';"' : ''
+        ];
 
         // Return
-        return $tags->getSnippet('ft_onecol', $contents, $e->getAttrAll());
+        return strtr($html, $replace);
     }
 
 }
+
 
 

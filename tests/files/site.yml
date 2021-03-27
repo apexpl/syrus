@@ -1,0 +1,59 @@
+
+####################
+# This file contains both, all per template based variables and 
+# any desired no-cache page / tag items.
+#
+# Please refer to the /docs/site_yml.md file for details.
+####################
+
+####################
+# Themes.  This section allows you to specify the theme to used based on 
+# directory the template being rendered is located in.  For example, you may have:
+#
+#  themes:
+#   admin/: admin_theme
+#   members/: member_theme
+#    default: public_theme
+#
+# With the above, any templates from the ~/admin/ directory rendered will utilize the 'admin_theme' theme, 
+# while any templates from the ~/members/~ directory will utilize the 'member_theme' theme, and al 
+# other templates rendered will default to the 'public_site' theme.
+####################
+
+themes:
+  default: default
+
+
+####################
+# Page Variables.  Allows you to define page titles and layouts to use on a 
+# per-template basis.
+####################  
+
+page_vars:
+
+  title:
+    tags/breadcrumbs.html: Testing Page Title
+    default: Syrus
+
+  layouts:
+    index.html: homepage
+    default: default
+
+  greetings:
+    tags/breadcrumbs.html: Hello
+    tags/data_table.html: Hi There
+    default: Good Day
+
+####################
+# No Cache Items.  Allows you to specify any desired specific pages or <s:...> tags 
+# that should not be cached, and instead should be parsed efor every request.
+####################
+
+nocache_pages:
+        - do_not_cache.html
+
+nocache_tags:
+  - data_table
+  - callouts
+  - placeholder
+

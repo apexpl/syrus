@@ -18,7 +18,7 @@ class t_button_group implements TagInterface
      */
     public function render(string $html, StackElement $e):string
     {
-        return $html;
+        return $e->getBody();
     }
 
 }

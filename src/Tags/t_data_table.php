@@ -61,8 +61,14 @@ class t_data_table implements TagInterface
         $new_header = $replace;
         $tags = Di::get(Tags::class);
 
+        // Get last header row
+        if (!preg_match("/^(.*)<tr>(.*?)<\/tr>(.*?)<\/thead>/si", $html, $m)) { 
+            return $html;
+        }
+        $header_html = $m[2];
+
         // GO through headers
-        preg_match_all("/<th(.*?)>(.+?)<\/th>/si", $html, $th_match, PREG_SET_ORDER);
+        preg_match_all("/<th(.*?)>(.*?)<\/th>/si", $header_html, $th_match, PREG_SET_ORDER);
         foreach ($th_match as $match) { 
 
             // Parse attr
@@ -88,7 +94,7 @@ class t_data_table implements TagInterface
         }
 
         // Finish and return
-        return str_replace($replace, $new_header, $html);
+        return str_replace($header_html, $new_header, $html);
     }
 
     /**
@@ -145,7 +151,7 @@ class t_data_table implements TagInterface
             $pgn_attr['id'] = preg_replace("/^tbl/", "pgn", $pgn_attr['id']);
 
             // Create pagination html
-            $pgn_e = new StackElement('pagination', $pgn_attr, '', '', '', $e->getStack()); 
+            $pgn_e = new StackElement($e->getId(), 'pagination', $pgn_attr, '', '', '', $e->getStack()); 
             $footer_attr['pagination'] = $tags->pagination($pgn_e);
         }
 

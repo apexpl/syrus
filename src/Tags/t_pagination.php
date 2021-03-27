@@ -28,9 +28,12 @@ class t_pagination implements TagInterface
         $current_page = $e->getAttr('current_page') ?? 1;
         $total_rows = $e->getAttr('total_rows') ?? 0;
         $rows_per_page = $e->getAttr('rows_per_page') ?? 25;
-        $href = $e->getAttr('pgn_href') ?? $_SERVER['REQUEST_URI'] . '?page=~page~';
         $max_items = $e->getAttr('max_items') ?? 10;
         $half_items = (int) floor($max_items / 2);
+
+        // Get href
+        $server_uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $href = $e->getAttr('pgn_href') ?? $server_uri . '?page=~page~';
 
         // Return blank, if not enough records
         if ($rows_per_page >= $total_rows) { 

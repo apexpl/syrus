@@ -40,7 +40,6 @@ class t_callouts implements TagInterface
         $css_aliases = json_decode($tags->getSnippet('callouts.css', '', []), true);
         $icons = json_decode($tags->getSnippet('callouts.icon', '', []), true);
 
-
         // Set replace
         $replace = [
             '~css_alias~' => $css_aliases[$type] ?? $css_aliases['info'], 
@@ -52,6 +51,7 @@ class t_callouts implements TagInterface
         foreach ($messages as $msg) { 
             $replace['~callout.messages~'] .= $tags->getSnippet('callouts.message', '', ['message' => $msg]);
         }
+        $replace['~callout.messages~'] = strtr($replace['~callout.messages~'], $replace);
 
         // Return
         return strtr($html, $replace);

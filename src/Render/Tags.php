@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace APex\Syrus\Render;
 
+use Apex\Syrus\Syrus;
 use Apex\Syrus\Parser\StackElement;
 use Apex\Container\Di;
 use Apex\Syrus\Exceptions\{SyrusInvalidTagMethodExceptionSyrusYamlException};
@@ -27,12 +28,13 @@ class Tags
      * Constructor
      */
     public function __construct(
-        private string $theme_dir = '', 
+        private Syrus $syrus, 
         private ?CacheItemPoolInterface $cache = null 
     ) { 
 
         // Set variables
-        $this->theme = Di::get('syrus.theme');
+        $this->theme = $syrus->getTheme();
+        $this->theme_dir = rtrim(Di::get('syrus.template_dir'), '/') . '/themes/' . $this->theme;
         $this->tag_namespaces = Di::get('syrus.tag_namespaces');
 
     }
