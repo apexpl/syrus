@@ -17,7 +17,8 @@
         "psr/cache": "~1.0",
         "apex/container": ">=0.2.1", 
         "league/uri": "^6.4", 
-        "apex/cluster": ">=0.1"
+        "apex/cluster": ">=0.1",
+        "michelf/php-markdown": "^1.9"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5" 
