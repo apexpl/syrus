@@ -131,6 +131,16 @@ class tags_test extends TestCase
     }
 
     /**
+     * Test markdown
+     */
+    public function test_markdown()
+    {
+        $syrus = new Syrus();
+        $html = $syrus->renderBlock('<s:markdown># Test Header</s:markdown>');
+        $this->assertTrue(str_contains($html, '<h1>Test Header</h1>'));
+    }
+
+    /**
      * ft_amount
      */
     public function test_ft_amount()
