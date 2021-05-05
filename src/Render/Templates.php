@@ -106,6 +106,12 @@ class Templates
 
         // Call render method
         Di::call([$php_class, 'render']);
+
+        // Render again, if template has changed
+        if ($file != $this->syrus->getTemplateFile()) { 
+            $this->executePhpClass($this->syrus->getTemplateFile());
+        }
+
     }
 
     /**

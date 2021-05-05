@@ -19,9 +19,9 @@ class VarContainer
     private array $blocks = [];
     private array $callouts = [];
     private string $callout_type = 'success';
-    private string $template_file = '';
-    private bool $file_locked = false;
-    private string $theme = 'default';
+    protected string $template_file = '';
+    protected bool $file_locked = false;
+    protected string $theme = 'default';
     public ?DebuggerInterface $debugger = null;
 
     /**

@@ -40,7 +40,9 @@ class Syrus extends VarContainer
         if (Di::get('syrus.enable_autorouting') === true && $file == '') { 
             $file = $this->doAutoRouting();
         }
-        $this->setTemplateFile($file);
+        if ($file != '') { 
+            $this->setTemplateFile($file);
+        }
 
         // Render the template
         $tparser = Di::make(Templates::class);

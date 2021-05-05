@@ -6,22 +6,26 @@
     "authors": [
         {
             "name": "Matt Dizak", 
-            "email": "matt.dizak@gmail.com"
+            "email": "mdizak@apexpl.io"
         }
-    ], 
+    ],
+    "support": {
+        "support": "https://reddit.com/r/apexpl",
+        "source": "https://github.com/apexpl/migrations"
+    }, 
     "license": "MIT",
     "require": {
         "php": ">=8.0.0",
         "symfony/yaml": "^5.2",
         "symfony/string": "^5.2",
         "psr/cache": "~1.0",
-        "apex/container": ">=0.2.1", 
+        "apex/container": "~0.3", 
         "league/uri": "^6.4", 
-        "apex/cluster": ">=0.1",
-        "michelf/php-markdown": "^1.9"
+        "michelf/php-markdown": "^1.9",
+        "apex/cluster": "^0.1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5" 
+        "phpunit/phpunit": "^9.5"
     },
     "suggest": {
         "symfony/cache": "^5.2", 

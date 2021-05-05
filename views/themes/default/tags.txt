@@ -423,4 +423,17 @@ active
 </div>
 
 
+[[google_analytics]]
+@required(tag_id)
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=~tag_id~"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '~tag_id~');
+</script>
+
+
 
