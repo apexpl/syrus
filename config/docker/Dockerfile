@@ -27,8 +27,8 @@ RUN pecl install -o -f zip && \
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
 # Add user
-RUN groupadd -g 1006 www
-RUN useradd -u 1006 -ms /bin/bash -g www www
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Set workdir
 WORKDIR /var/www
