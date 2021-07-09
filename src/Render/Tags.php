@@ -64,7 +64,7 @@ class Tags
             }
 
             // Render html via tag specific class
-            $tag = new $tag_class();
+            $tag = Di::make($tag_class);
             $html = $tag->render($html, $e);
 
             // Break

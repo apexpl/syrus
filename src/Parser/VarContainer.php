@@ -21,7 +21,7 @@ class VarContainer
     private string $callout_type = 'success';
     protected string $template_file = '';
     protected bool $file_locked = false;
-    protected string $theme = 'default';
+    protected string $theme = '';
     public ?DebuggerInterface $debugger = null;
 
     /**
@@ -46,7 +46,7 @@ class VarContainer
         // Add to vars
         if ($name == '' && is_array($value)) { 
             foreach ($value as $k => $v) { 
-                $this->$vars[$k] = $v;
+                $this->vars[$k] = $v;
                 $this->debugger?->addItem('syrus.vars', [$k, $v]);
             }
 

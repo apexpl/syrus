@@ -23,7 +23,7 @@ class t_boolean implements TagInterface
         $value = $e->getAttr('value') ?? 0;
         $replace = [
             '~chk_yes~' => $value == 1 ? 'checked="checked"' : '', 
-            '~chk_no~' => $value == 0 ? 'checked="checked"' : ''
+            '~chk_no~' => $value != 1 ? 'checked="checked"' : ''
         ];
 
         // Return

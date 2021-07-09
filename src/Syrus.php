@@ -80,25 +80,31 @@ class Syrus extends VarContainer
     /**
      * Do auto-routing
      */
-    private function doAutoRouting():string
+    public function doAutoRouting(string $path = '', string $ext = '.html'):string
     {
 
         // Get URI
-        $uri = Di::get(UriInterface::class);
-        $file = $uri->getPath() == '/' ? 'index.html' : ltrim($uri->getPath(), '/') . '.html';
+        if ($path == '') { 
+            $uri = Di::get(UriInterface::class);
+            $path = $uri->getPath();
+        }
+        $file = $path == '/' ? 'index' : trim($path, '/');
+
+        // Get filename
+        $filename = match(true) { 
+            file_exists($this->template_dir . '/html/' . $file . $ext) ? true : false => $file . $ext, 
+            file_exists($this->template_dir . '/html/' . $file . '/index' . $ext) ? true : false => $file . '/index' . $ext, 
+            file_exists($this->template_dir . '/html/' . $file . '/404' . $ext) ? true : false => $file . '/404.html', 
+            default => '404' . $ext
+        };
 
         // Check file
-        if (!file_exists($this->template_dir . '/html/' . $file)) { 
-
-            // Check for 404.html page
-            if (!file_exists($this->template_dir . '/html/404.html')) { 
-                throw new SyrusTemplateNotFoundException("No template found at this URI, and no 404.html template exists.");
-            }
-            $file = '404.html';
+        if (!file_exists($this->template_dir . '/html/' . $filename)) { 
+        throw new SyrusTemplateNotFoundException("No template found at this URI, and no 404.html template exists.");
         }
 
         // Return
-        return $file;
+        return $filename;
     }
 
 }

@@ -4,7 +4,7 @@ declare(strict_Types = 1);
 namespace Apex\Syrus\Render;
 
 use Apex\Syrus\Syrus;
-use Apex\Syrus\Parser\{common, Parser};
+use Apex\Syrus\Parser\{Common, Parser};
 use Apex\Container\Di;
 use Psr\Cache\CacheItemPoolInterface;
 use Apex\Syrus\Interfaces\LoaderInterface;
