@@ -18,7 +18,7 @@
         "php": ">=8.0.0",
         "symfony/yaml": "~5.2",
         "symfony/string": "~5.2",
-        "psr/cache": "~1.0",
+        "psr/cache": "~2.0",
         "apex/container": "~0.3", 
         "league/uri": "~6.4", 
         "michelf/php-markdown": "~1.9",
