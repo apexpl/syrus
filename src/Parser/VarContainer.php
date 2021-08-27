@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Apex\Syrus\Parser;
 
 use Apex\Container\Di;
+use Apex\Syrus\Interfaces\LoaderInterface;
 use Apex\Debugger\Interfaces\DebuggerInterface;
 use Apex\Syrus\Exceptions\SyrusInvalidArgumentException;
 
@@ -224,6 +225,14 @@ class VarContainer
      */
     public function getTheme():string
     {
+
+        // Get theme from loader, if needed
+        if ($this->theme == '') { 
+            $loader = Di::make(LoaderInterface::class);
+            $this->theme = $loader->getTheme();
+        }
+
+        // Return
         return $this->theme;
     }
 
