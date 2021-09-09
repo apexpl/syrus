@@ -60,6 +60,9 @@ class Templates
         ]);
         $tpl_code = $layouts->apply();
 
+        // Merge vars
+        $tpl_code = Common::mergeVars($tpl_code, $this->syrus->getVars());
+
         // Check caching
         $nocache = $this->cache === null || $this->loader->checkNoCachePage($file) === true ? true : false;
 

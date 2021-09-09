@@ -63,6 +63,9 @@ class Syrus extends VarContainer
     public function renderBlock(string $html):string
     {
 
+        // Merge
+        $html = Common::mergeVars($html, $this->getVars());
+
         // Render html
         $parser = Di::make(Parser::class, [
             'tpl_code' => $html, 

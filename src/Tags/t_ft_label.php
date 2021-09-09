@@ -26,6 +26,12 @@ class t_ft_label implements TagInterface
             return "<b>ERROR:</b> No 'label' attribute found in 'ft_label' tag.";
         }
         $value = $attr['value'] ?? '';
+        $href = $attr['href'] ?? '';
+
+        // Add hyperlink, if needed
+        if ($href != '') { 
+            $value = "<a href=\"$href\">$value</a>";
+        }
 
         // Get HTML
         $html = '<tr><td><b>' . $attr['label'] . ':</b></td><td>' . $value . '</td></tr>';
