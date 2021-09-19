@@ -23,6 +23,7 @@ class VarContainer
     protected string $template_file = '';
     protected bool $file_locked = false;
     protected string $theme = '';
+    protected bool $has_errors = false;
     public ?DebuggerInterface $debugger = null;
 
     /**
@@ -94,6 +95,9 @@ class VarContainer
         // Add
         $this->callouts[] = $message;
         $this->callout_type = $type;
+        if ($type == 'error') { 
+            $this->has_errors = true;
+        }
     }
 
     /**
@@ -234,6 +238,14 @@ class VarContainer
 
         // Return
         return $this->theme;
+    }
+
+    /**
+     * Has errors
+     */
+    public function hasErrors():bool
+    {
+        return $this->has_errors;
     }
 
 }

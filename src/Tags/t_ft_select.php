@@ -23,6 +23,9 @@ class t_ft_select implements TagInterface
 
         // Initialize
         $attr = $e->getAttrAll();
+        if (!isset($attr['name'])) { 
+            return "<b>ERROR:</b> The 'ft_select' tag does not contain a 'name' attribute.";
+        }
         if (!isset($attr['label'])) { 
             $attr['label'] = ucwords(str_replace('_', ' ', $attr['name']));
         }

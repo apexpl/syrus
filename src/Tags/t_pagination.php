@@ -74,7 +74,7 @@ class t_pagination implements TagInterface
 
         // Last page
         $display = $total_pages > $end_page ? 'visible' : 'none';
-        $items .= $this->paginationItem("&raquo;", $href, $end_page, $display);
+        $items .= $this->paginationItem("&raquo;", $href, (int) $end_page, $display);
 
         // Set pagination attributes
         $pgn_attr = [

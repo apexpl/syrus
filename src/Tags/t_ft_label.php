@@ -27,15 +27,22 @@ class t_ft_label implements TagInterface
         }
         $value = $attr['value'] ?? '';
         $href = $attr['href'] ?? '';
+        $bold = $attr['bold'] ?? 1;
 
         // Add hyperlink, if needed
         if ($href != '') { 
             $value = "<a href=\"$href\">$value</a>";
         }
 
-        // Get HTML
-        $html = '<tr><td><b>' . $attr['label'] . ':</b></td><td>' . $value . '</td></tr>';
-        return $html;
+        // Add bold, if needed
+        $attr['label'] .= ':';
+        if ($bold == 1) { 
+            $attr['label'] = '<b>' . $attr['label'] . '</b>';
+        }
+
+// Return
+        $tags = Di::make(Tags::class);
+        return $tags->getSnippet('ft_twocol', $value, $attr);
     }
 
 }

@@ -76,7 +76,8 @@ class t_data_table implements TagInterface
             $sort_attr = [
                 'sort_href' => $attr['sort_href'] ?? '#', 
                 'name' => $match[2], 
-                'col_alias' => $th_attr['alias'] ?? strtolower(str_replace(' ', '_', $match[2])), 
+                'col_alias' => $th_attr['alias'] ?? strtolower(str_replace(' ', '_', $match[2])),
+                'sort_dir' => 'asc',
                 'sort_asc' => '', 
                 'sort_desc' => ''
             ];
@@ -85,6 +86,7 @@ class t_data_table implements TagInterface
             $has_sort = $th_attr['has_sort'] ?? 0;
             if ($has_sort == 1) { 
                 $sort_attr['sort_asc'] = $tags->getSnippet('data_table.sort_asc', '', $sort_attr);
+                $sort_attr['sort_dir'] = 'desc';
                 $sort_attr['sort_desc'] = $tags->getSnippet('data_table.sort_desc', '', $sort_attr);
             }
 
@@ -148,7 +150,7 @@ class t_data_table implements TagInterface
 
             // Set attributes
             $pgn_attr = $attr;
-            $pgn_attr['id'] = preg_replace("/^tbl/", "pgn", $pgn_attr['id']);
+            $pgn_attr['id'] = preg_replace("/^tbl/", "", $pgn_attr['id']);
 
             // Create pagination html
             $pgn_e = new StackElement($e->getId(), 'pagination', $pgn_attr, '', '', '', $e->getStack()); 
