@@ -12,13 +12,13 @@ use Apex\Syrus\Exceptions\SyrusTemplateNotFoundException;
 
 
 /**
- * Syrus template engine.
+ * Syrus Template Engine.
  */
 class Syrus extends VarContainer
 {
 
     /**
-     * Constructor
+     * Instantiate new instance of Syrus Template Engine.
      */
     public function __construct(
         private ?string $container_file = ''
@@ -31,7 +31,7 @@ class Syrus extends VarContainer
     }
 
     /**
-     * Render template
+     * Render a template file.
      */ 
     public function render(string $file = ''):string
     {
@@ -58,7 +58,7 @@ class Syrus extends VarContainer
     }
 
     /**
-     * Render block
+     * Render a block of text.
      */
     public function renderBlock(string $html):string
     {
@@ -81,7 +81,7 @@ class Syrus extends VarContainer
     }
 
     /**
-     * Do auto-routing
+     * Auto-routing.  Determine template file to display based on URI being viewed.
      */
     public function doAutoRouting(string $path = '', string $ext = '.html'):string
     {

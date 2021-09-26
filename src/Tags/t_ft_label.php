@@ -29,6 +29,11 @@ class t_ft_label implements TagInterface
         $href = $attr['href'] ?? '';
         $bold = $attr['bold'] ?? 1;
 
+        // Check value
+        if ($value == '') {
+            $value = $e->getBody();
+        }
+
         // Add hyperlink, if needed
         if ($href != '') { 
             $value = "<a href=\"$href\">$value</a>";

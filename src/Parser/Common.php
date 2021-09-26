@@ -47,7 +47,7 @@ class Common
             // Go through array elements
             foreach ($value as $child_key => $child_value) { 
                 if (!is_scalar($child_value)) { continue; }
-                $html = str_ireplace("~$key.$child_key~", $child_value, $html);
+                $html = str_ireplace("~$key.$child_key~", (string) $child_value, $html);
             }
         }
 

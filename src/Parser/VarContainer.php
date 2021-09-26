@@ -27,7 +27,7 @@ class VarContainer
     public ?DebuggerInterface $debugger = null;
 
     /**
-     * Assign merge variable
+     * Assign a variable which will be merged when template is rendered.
      */
     public function assign(string $name, mixed $value):void
     { 
@@ -59,7 +59,7 @@ class VarContainer
     }
 
     /**
-     * Add block
+     * Add block that can be used within foreach template tags.
      */
     public function addBlock(string $name, array $block):void
     {
@@ -77,7 +77,7 @@ class VarContainer
     }
 
     /**
-     * Add callout message
+     * Add callout message displayed at the top of the browser.
      */
     public function addCallout(string $message, string $type = 'success'):void
     {
@@ -101,7 +101,7 @@ class VarContainer
     }
 
     /**
-     * Get variables
+     * Get all variables, used by parser.
      */
     public function getVars():array
     {
@@ -109,7 +109,7 @@ class VarContainer
     }
 
     /**
-     * Get blocks
+     * Get all blocks for use within foreach tags.
      */
     public function getBlocks():array
     {
@@ -117,7 +117,7 @@ class VarContainer
     }
 
     /**
-     * Get single block
+     * Get a single block used within foreach tags.
      */
     public function getBlock(string $name):array
     {
@@ -125,7 +125,7 @@ class VarContainer
     }
 
     /**
-     * Get callouts
+     * Get all call messages.
      */
     public function getCallouts():array
     {
@@ -133,7 +133,7 @@ class VarContainer
     }
 
     /**
-     * Get callout type
+     * Get the type of callout message (success, error, warning)
      */
     public function getCalloutType():string
     {
@@ -141,7 +141,7 @@ class VarContainer
     }
 
     /**
-     * Purge
+     * Purge all previously added variables and blocks.
      */
     public function purge():void
     {
@@ -152,7 +152,7 @@ class VarContainer
     }
 
     /**
-     * Gather all variables for the parser
+     * Gather all variables and blocks, used by parser.
      */
     public function gatherVars():array
     {
@@ -173,7 +173,7 @@ class VarContainer
     }
 
     /**
-     * Load base Syrus variables
+     * Load base variables that are supported by all templates.
      */
     private function loadBaseVariables():array
     {
@@ -190,7 +190,7 @@ class VarContainer
     }
 
     /**
-     * Set template file
+     * Set the template file to display upon rendering a template.
      */
     public function setTemplateFile(string $file, bool $is_locked = false):bool
     {
@@ -209,7 +209,7 @@ class VarContainer
     }
 
     /**
-     * Set theme
+     * Set theme to utilize upon rendering a template.
      */
     public function setTheme(string $theme):void
     {
@@ -217,7 +217,7 @@ class VarContainer
     }
 
     /**
-     * Get template file
+     * Get the template file assigned.
      */
     public function getTemplateFile():string
     {
@@ -225,7 +225,7 @@ class VarContainer
     }
 
     /**
-     * Get theme
+     * Get or determine the theme to utilize based on URI being viewed.
      */
     public function getTheme():string
     {
@@ -241,7 +241,15 @@ class VarContainer
     }
 
     /**
-     * Has errors
+     * Clear all entries within an existing block.
+     */
+    public function clearBlock(string $name):void
+    {
+        $this->blocks[$name] = [];
+    }
+
+    /**
+     * Check if any 'error' callout messages have been added.
      */
     public function hasErrors():bool
     {
