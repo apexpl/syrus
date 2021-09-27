@@ -137,7 +137,8 @@ class Tags
         }
 
         // Check cache
-        if ($item = $this->cache?->getItem($cache_key) && $item?->isHit() === true) {  
+        $item = $this->cache?->getItem($cache_key);
+        if ($item !== null && $item?->isHit() === true) {  
             $this->snippets = $item->get();
             return;
         }
@@ -182,7 +183,7 @@ class Tags
         }
 
         // Save cache item
-        if ($this->cache !== null) { 
+        if ($item !== null) { 
             $item->set($this->snippets);
             $this->cache->save($item);
         }

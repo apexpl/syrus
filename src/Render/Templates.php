@@ -47,7 +47,7 @@ class Templates
 
         // Check cache
         $item = $this->cache?->getItem('syrus:t:' . $file);
-        if ($item?->isHit() === true) { 
+        if ($item !== null && $item?->isHit() === true) { 
             return $item->get();
         }
 
@@ -84,7 +84,7 @@ class Templates
         if (($ttl = Di::get('syrus.cache_ttl')) !== null) { 
             $item->expiresAfter((int) $ttl);
         }
-        $this->cache->save($item);
+        $this->cache?->save($item);
 
         // Return
         return Common::mergeVars($html, $this->syrus->getVars());
