@@ -23,7 +23,6 @@ class t_markdown implements TagInterface
 
         // Apply markdown formatting
         $md = MarkdownExtra::defaultTransform($e->getBody());
-        $md = preg_replace("/<code (.*?)>/", "<code class=\"prettyprint\">", $md);
 
         // Return
     return $md;

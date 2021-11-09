@@ -42,6 +42,8 @@ class t_data_table implements TagInterface
         // Get search bar, if needed
         if (isset($attr['has_search']) && $attr['has_search'] == 1) { 
             $html = $this->addSearchBar($html, $attr);
+        } else { 
+            $attr['search_bar'] = '';
         }
 
         // Get table footer
@@ -110,7 +112,11 @@ class t_data_table implements TagInterface
         $search_bar = $tags->getSnippet('data_table.search_bar', '', $attr);
 
         // Add search bar to html
-        $html = preg_replace("/<thead(.*?)>/i", "\$0" . $search_bar, $html, 1);
+        if (str_contains($html, '~search_bar~')) {
+            $html = str_replace('~search_bar~', $search_bar, $html);
+        } else { 
+            $html = preg_replace("/<thead(.*?)>/i", "\$0" . $search_bar, $html, 1);
+        }
 
         // Return
         return $html;

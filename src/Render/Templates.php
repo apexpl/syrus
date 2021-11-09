@@ -37,7 +37,7 @@ class Templates
     {
 
         // Send RPC call via cluster, if needed
-        if (Di::get('syrus.use_cluster') === true && class_exists(Dispatcher::class)) { 
+        if (Di::get('syrus.use_cluster') === true && class_exists(Dispatcher::class) && $this->syrus->getRpcEnabled() === true) { 
             $this->dispatchRPcCall($this->syrus->getTemplateFile());
         }
 

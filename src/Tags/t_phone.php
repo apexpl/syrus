@@ -5,7 +5,8 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Interfaces\TagInterface;
-
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
 
 /**
  * Renders a specific template tag.  Please see developer documentation for details.
@@ -258,9 +259,14 @@ class t_phone implements TagInterface
         $placeholder = $e->getAttr('placeholder') ?? '';
 
         // Check value
-        if (preg_match("/\+(\d+?)\s(\d+)$/", $value, $match)) { 
-            $country = $match[1];
-            $phone = $match[2];
+        if ($value != '') {
+            $value = preg_replace("/[\s\W]/", "", $value);
+            try {
+                $number = PhoneNumber::parse('+' . $value);
+                $country = $number->getCountryCode();
+                $phone = $number->getNationalNumber();
+            } catch(PhoneNumberParseException $e) { 
+            }
         }
 
         // Create country options

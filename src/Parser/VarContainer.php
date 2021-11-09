@@ -24,6 +24,7 @@ class VarContainer
     protected bool $file_locked = false;
     protected string $theme = '';
     protected bool $has_errors = false;
+    protected $rpc_enabled = true;
     public ?DebuggerInterface $debugger = null;
 
     /**
@@ -254,6 +255,22 @@ class VarContainer
     public function hasErrors():bool
     {
         return $this->has_errors;
+    }
+
+    /**
+     * Set rpc enabled
+     */
+    public function setRpcEnabled(bool $enabled):void
+    {
+        $this->rpc_enabled = $enabled;
+    }
+
+    /**
+     * Get rpc enabled
+     */
+    public function getRpcEnabled():bool
+    {
+        return $this->rpc_enabled;
     }
 
 }

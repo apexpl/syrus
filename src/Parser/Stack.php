@@ -16,8 +16,8 @@ class Stack
     // Properties
     private int $tag_id = 0;
     private string $parent_id = '0';
-    private array $stack = [];
-    private array $meta = [];
+    public array $stack = [];
+    public array $meta = [];
     private array $depth = [];
     private string $position = '0';
 
