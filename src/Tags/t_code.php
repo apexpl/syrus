@@ -37,7 +37,7 @@ class t_code implements TagInterface
         ]);
 
         // Set html
-        $html = $this->tags->getSnippet('code', $code, ['language' => $lang]);
+        $html = $tags->getSnippet('code', $code, ['language' => $lang]);
         return $html;
     }
 
