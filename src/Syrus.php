@@ -97,9 +97,21 @@ class Syrus extends VarContainer
         $filename = match(true) { 
             file_exists($this->template_dir . '/html/' . $file . $ext) ? true : false => $file . $ext, 
             file_exists($this->template_dir . '/html/' . $file . '/index' . $ext) ? true : false => $file . '/index' . $ext, 
-            file_exists($this->template_dir . '/html/' . $file . '/404' . $ext) ? true : false => $file . '/404.html', 
-            default => '404' . $ext
+            file_exists($this->template_dir . '/html/' . $file . '/404.html') ? true : false => $file . '/404.html', 
+            default => '404.html'
         };
+
+        // Check directories for 404.html, if needed
+        if ($filename == '404.html') {
+            $parts = explode('/', trim($path, '/'));
+            while (count($parts) > 0) {
+                $filename = implode('/', $parts) . '/404.html';
+                if (file_exists($this->template_dir . '/html/' . $filename)) {
+                    break;
+                }
+                array_pop($parts);
+            }
+        }
 
         // Check file
         if (!file_exists($this->template_dir . '/html/' . $filename)) { 
