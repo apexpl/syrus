@@ -12,6 +12,7 @@ use Apex\Debugger\Interfaces\DebuggerInterface;
 use Apex\Cluster\Dispatcher;
 use Apex\Cluster\Interfaces\{MessageResponseInterface, FeHandlerInterface};
 use Apex\Syrus\Exceptions\{SyrusRpcException, SyrusTemplateNotFoundException};
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Renders full page templates.
@@ -106,9 +107,24 @@ class Templates
         if (!class_exists($php_class)) { 
             return;
         }
+        $obj = Di::make($php_class);
 
-        // Call render method
-        Di::call([$php_class, 'render']);
+        // Get request method
+        if (!$request = Di::get(ServerRequestInterface::class)) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        } else {
+            $method = $request->getMethod();
+        }
+
+        // Check for http specific method
+        if (method_exists($obj, strtolower($method))) {
+            Di::call([$obj, strtolower($method)]);
+        }
+
+        // Call render method, if needed
+        if (method_exists($obj, 'render')) {
+            Di::call([$obj, 'render']);
+        }
 
         // Render again, if template has changed
         if ($file != $this->syrus->getTemplateFile()) { 
