@@ -21,10 +21,9 @@ class Parser
     public function __construct(
         private LoaderInterface $loader,
         private ?DebuggerInterface $debugger = null,  
-        private string $tpl_code, 
+        private string $tpl_code = '',
         private array $vars = [], 
-        private bool $parse_nocache = true, 
-
+        private bool $parse_nocache = true
     ) { 
 
     }
