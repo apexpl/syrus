@@ -105,8 +105,9 @@ class Syrus extends VarContainer
         if ($filename == '404.html') {
             $parts = explode('/', trim($path, '/'));
             while (count($parts) > 0) {
-                $filename = implode('/', $parts) . '/404.html';
-                if (file_exists($this->template_dir . '/html/' . $filename)) {
+                $tmp_filename = implode('/', $parts) . '/404.html';
+                if (file_exists($this->template_dir . '/html/' . $tmp_filename)) {
+                    $filename = $tmp_filename;
                     break;
                 }
                 array_pop($parts);
