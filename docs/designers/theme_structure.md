@@ -23,9 +23,9 @@ tags.txt | Contains all HTML snippets the various `<s:...>` tags are replaced wi
 
 ### Includes
 
-Within the ~/views/themes/mysite/includes directory you will find a default header and footer, which are rather self-exclamatory.  You may add files as desired to this directory, and the contents can be included within any file via `<s:theme>` tags, for example:
+Within the ~/views/themes/mysite/includes directory you will find a default header and footer, which are rather self-exclamatory.  You may add files as desired to this directory, and the contents can be included within any file via `<s:include>` tags, for example:
 
-`<s:theme include="header.html">`
+`<s:include header>`
 
 That's it, and that tag will be replaced with the contents of the ~/views/themes/mysite/includes/header.html file.
 
@@ -38,16 +38,13 @@ Structure the layout any way as you wish using the includes described above for 
 
 `<s:page_contents>`
 
-The above tag will be replaced with the body contents of the page being viewed.  You may define which layout to use for each page by modifying the `layouts` section within the ~/config/site.yml file as desired, for example:
+The above tag will be replaced with the body contents of the page being viewed.  You may define which layout to use for each page by adding a `<s:layout FILE>` tag anywhere within the body page, for example:
 
 ~~~
-layouts:
-  services/cleaning.html: 2_col_left_sidebar
-    contact.html: 2_col_left_sidebar
-    default: default
+<s:layout gallery>
 ~~~
 
-In the above example, the services/cleaning.html and contact.html templates will be rendered using the `2_col_left_sidebar.html` layout, while all other templates will use the `default.html` layout.
+If the above tag is present within the template, the page will be rendered utilizing the gallery.html layout.  If no `<s:layout>` tag is found within the template, it will utilize the default.html layout.
 
 
 ### tags.txt File

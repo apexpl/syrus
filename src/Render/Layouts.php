@@ -43,8 +43,11 @@ class Layouts
         // Add layout
         $html = $this->addLayout($this->tpl_code, $layout);
 
-        // Parse theme tags
-        $html = $this->parseThemeTags($html);
+        // Parse include tags
+        $html = $this->processIncludeTags($html);
+
+        // Parse yield tags
+        $html = $this->processYieldTags($html);
 
         // Return
         return $html;
@@ -67,8 +70,14 @@ class Layouts
         }
         $this->theme_dir = rtrim(Di::get('syrus.template_dir'), '/') . '/themes/' . $theme;
 
+        // Check for <s:layout> tag
+        $layout = 'default';
+        if (preg_match("/<s:layout (.+?)>/i", $this->tpl_code, $match)) {
+            $this->tpl_code = str_replace($match[0], '', $this->tpl_code);
+            $layout = trim($match[1]);
+        }
+
         // Get layout
-        $layout = $this->loader->getPageVar('layouts');
         if (file_exists($this->theme_dir . '/layouts/' . $layout . '.html')) { 
             $layout .= '.html';
         }
@@ -115,7 +124,7 @@ class Layouts
             throw new SyrusLayoutNotExistsException("Layout does not exist $layout within the theme $this->theme");
         }
 
-        // Get layout, and replace body contents
+        // Get html, and replace body
         $html = file_get_contents($layout_file);
         $html = str_replace("<s:page_contents>", $tpl_code, $html);
 
@@ -126,16 +135,16 @@ class Layouts
     /**
      * Parse theme tags
      */
-    private function parseThemeTags(string $html):string
+    private function processIncludeTags(string $html):string
     {
 
         // Process html
         do {
 
             // Go through <s:theme> tags
-            preg_match_all("/<s:theme(.*?)>/si", $html, $theme_match, PREG_SET_ORDER);
-            foreach ($theme_match as $match) { 
-                $output = $this->parseSingleThemeTag(Common::parseAttr($match[1]));
+            preg_match_all("/<s:(theme|include) (.*?)>/si", $html, $theme_match, PREG_SET_ORDER);
+            foreach ($theme_match as $match) {
+                $output = $this->processSingleInclude(trim($match[1]), Common::parseAttr($match[2]));
                 $html = str_replace($match[0], $output, $html);
             }
 
@@ -148,25 +157,65 @@ class Layouts
     /**
      * Parse single theme tag
      */
-    private function parseSingleThemeTag(array $attr):string
+    private function processSingleInclude(string $tag, array $attr):string
     {
 
-        // Include file
-        if (isset($attr['include']) && $attr['include'] != '') { 
+        // Get filename
+        if ($tag == 'include') {
+            $filename = $attr['_orig'];
+        } elseif (isset($attr['include']) && $attr['include'] != '') {
+            $filename = $attr['include'];
+        }
+        $inc_file = $this->theme_dir . '/includes/' . $filename;
 
-            $inc_file = $this->theme_dir . '/includes/' . $attr['include'];
-            if (file_exists($inc_file)) { 
-                return file_get_contents($inc_file);
-            } else { 
-                return "<b>ERROR: </b> The include '$attr[include]' does not exist.";
-            }
-
+        // Check for missing .html extension
+        if (file_exists($inc_file . '.html')) {
+            $inc_file .= '.html';
         }
 
-        // If here, no valid theme attributes found
-        return "<b>ERROR:</b> Invalid 's:theme' tag.";
+        // Get replacement value
+        if (file_exists($inc_file)) { 
+            $html = file_get_contents($inc_file);
+        } else { 
+            $html = "<b>ERROR: </b> The include '$filename' does not exist.";
+        }
 
+        // Return
+        return $html;
     }
+
+    /**
+     * Parse yield tags
+     */
+    private function processYieldTags(string $html):string
+    {
+
+        // Go through <s:var> tags
+        $vars = [];
+        preg_match_all("/<s:var (.+?)>(.*?)<\/s:var>/si", $html, $var_match, PREG_SET_ORDER);
+        foreach ($var_match as $m) {
+            $alias = strtolower(trim($m[1]));
+            $vars[$alias] = $m[2];
+            $html = str_replace($m[0], '', $html); 
+        }
+
+        // Go through yield tags
+        preg_match_all("/<s:yield (.+?)>/i", $html, $yield_match, PREG_SET_ORDER);
+        foreach ($yield_match as $m) {
+            $alias = strtolower(trim($m[1]));
+
+            // Get value
+            $value = $vars[$alias] ?? null;
+            if ($value === null) {
+                $value = "No 's:var' tag found for the '$alias' yield tag.";
+            }
+            $html = str_replace($match[0], $value, $html);
+        }
+
+        // Return
+        return $html;
+    }
+
 
 }
 

@@ -30,9 +30,10 @@ Install via Composer with:
         1. [Theme Structure](https://github.com/apexpl/syrus/blob/master/docs/designers/theme_structure.md#theme_structure)
         2. [Body Content Pages](https://github.com/apexpl/syrus/blob/master/docs/designers/theme_structure.md#body_pages)
         3. [Public Assets](https://github.com/apexpl/syrus/blob/master/docs/designers/theme_structure.md#public_assets)
-    3. [Variables, foreach, and if / else Tags](https://github.com/apexpl/syrus/blob/master/docs/designers/variables.md)
-    4. [&lt;s:...&gt; Template Tags](https://github.com/apexpl/syrus/blob/master/docs/designers/tags.md)
-    5. [Using Multiple Themes](https://github.com/apexpl/syrus/blob/master/docs/designers/multiple_themes.md)
+    3. [Yield / Var Tags](https://github.com/apexpl/syrus/blob/master/docs/designers/yield.md)
+    4. [Variables, foreach, and if / else Tags](https://github.com/apexpl/syrus/blob/master/docs/designers/variables.md)
+    5. [&lt;s:...&gt; Template Tags](https://github.com/apexpl/syrus/blob/master/docs/designers/tags.md)
+    6. [Using Multiple Themes](https://github.com/apexpl/syrus/blob/master/docs/designers/multiple_themes.md)
 2. Developers
     1. [Syrus class / Container Definitions](https://github.com/apexpl/syrus/blob/master/docs/syrus.md)
         1. [site.yml Configuration File](https://github.com/apexpl/syrus/blob/master/docs/site_yml.md)

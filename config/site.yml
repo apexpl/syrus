@@ -25,7 +25,7 @@ themes:
 
 
 ####################
-# Page Variables.  Allows you to define page titles and layouts to use on a 
+# Page Variables.  Allows you to define page titles to use on a 
 # per-template basis.
 ####################  
 
@@ -33,10 +33,6 @@ page_vars:
 
   title:
     default: Syrus
-
-  layouts:
-    index.html: homepage
-    default: default
 
 ####################
 # No Cache Items.  Allows you to specify any desired specific pages or <s:...> tags 

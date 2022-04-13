@@ -17,8 +17,13 @@ class Common
     public static function parseAttr(string $string):array
     {
 
+        // Initialize
+        $attr = [
+            '_orig' => trim($string)
+        ];
+
+
         // Parse attributes
-        $attr = [];
         preg_match_all("/(.+?)=\"(.+?)(\"|$)/", $string, $attr_match, PREG_SET_ORDER);
         foreach ($attr_match as $match) { 
             $attr[trim($match[1])] = trim($match[2], '"');

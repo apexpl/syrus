@@ -1,7 +1,7 @@
 
 # site.yml Configuration File
 
-Syrus utilizes a small YAML configuration file for various information such as which themes and layouts to use, per-template page variables, and no-cache items.  The container definitions file (default ~/config/container.php) contains a `syrus.site_yml` item, which is the location of the site.yml file and defults to ~/config/site.yml.
+Syrus utilizes a small YAML configuration file for various information such as which themes to use, per-page template variables, and no-cache items.  The container definitions file (default ~/config/container.php) contains a `syrus.site_yml` item, which is the location of the site.yml file and defults to ~/config/site.yml.
 
 Below describes the various root elements supported by the site.yml file.
 
@@ -48,13 +48,5 @@ With the above code, `$value` would be the value of the array we defined for the
 ## nocache_pages / nocache_tags
 
 These elements are both one-dimentional arrays and contain a list of template files and `<s:...>` tag names that Syrus should never cache.  With the tag based caching, Syrus effectively parses the template twice.  The first pass skips over the nocache tags leaving them unmodified, then caches the resulting page, and parses it again.  The next time the template is rendered the partially / mostly cached version of the template is retrieved from the cache, and only the remaining `<s:...>` tags are parsed.
-
-
-
-
-
-
-
-
 
 
