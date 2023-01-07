@@ -43,7 +43,7 @@ class t_callouts implements TagInterface
         // Set replace
         $replace = [
             '~css_alias~' => $css_aliases[$type] ?? $css_aliases['info'], 
-            '~icon~' => $icons[$type] ?? $icons['info'], 
+            '~icon~' => $icons[$type] ?? 'info',
             '~callout.messages~' => ''
         ];
 
