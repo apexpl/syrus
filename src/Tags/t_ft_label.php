@@ -40,7 +40,6 @@ class t_ft_label implements TagInterface
         }
 
         // Add bold, if needed
-        $attr['label'] .= ':';
         if ($bold == 1) { 
             $attr['label'] = '<b>' . $attr['label'] . '</b>';
         }
