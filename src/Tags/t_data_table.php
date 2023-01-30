@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\{StackElement, Common};
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -15,6 +14,9 @@ use Apex\Syrus\Interfaces\TagInterface;
 class t_data_table implements TagInterface
 {
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
@@ -22,7 +24,6 @@ class t_data_table implements TagInterface
     {
 
         // Initialize
-        $tags = Di::get(Tags::class);
         $attr = $e->getAttrAll();
         if (!isset($attr['id'])) { 
             $attr['id'] = 'tblMain';
@@ -61,7 +62,6 @@ class t_data_table implements TagInterface
 
         // Initialize
         $new_header = $replace;
-        $tags = Di::get(Tags::class);
 
         // Get last header row
         if (!preg_match("/^(.*)<tr>(.*?)<\/tr>(.*?)<\/thead>/si", $html, $m)) { 
@@ -87,13 +87,13 @@ class t_data_table implements TagInterface
             // Check can sort
             $has_sort = $th_attr['has_sort'] ?? 0;
             if ($has_sort == 1) { 
-                $sort_attr['sort_asc'] = $tags->getSnippet('data_table.sort_asc', '', $sort_attr);
+                $sort_attr['sort_asc'] = $this->tags->getSnippet('data_table.sort_asc', '', $sort_attr);
                 $sort_attr['sort_dir'] = 'desc';
-                $sort_attr['sort_desc'] = $tags->getSnippet('data_table.sort_desc', '', $sort_attr);
+                $sort_attr['sort_desc'] = $this->tags->getSnippet('data_table.sort_desc', '', $sort_attr);
             }
 
             // Get th html
-            $th = $tags->getSnippet('data_table.th', '', $sort_attr);
+            $th = $this->tags->getSnippet('data_table.th', '', $sort_attr);
             $new_header = str_replace($match[0], $th, $new_header);
         }
 
@@ -108,8 +108,7 @@ class t_data_table implements TagInterface
     {
 
         // Initialize
-        $tags = Di::get(Tags::class);
-        $search_bar = $tags->getSnippet('data_table.search_bar', '', $attr);
+        $search_bar = $this->tags->getSnippet('data_table.search_bar', '', $attr);
 
         // Add search bar to html
         if (str_contains($html, '~search_bar~')) {
@@ -131,7 +130,6 @@ class t_data_table implements TagInterface
         // Initialize
         $total_rows = $e->getAttr('total_rows') ?? 0;
         $buttons = $e->getChildren('button_group');
-        $tags = Di::get(Tags::class);
 
         // Start footer attr
         $footer_attr = [
@@ -160,11 +158,11 @@ class t_data_table implements TagInterface
 
             // Create pagination html
             $pgn_e = new StackElement($e->getId(), 'pagination', $pgn_attr, '', '', '', $e->getStack()); 
-            $footer_attr['pagination'] = $tags->pagination($pgn_e);
+            $footer_attr['pagination'] = $this->tags->pagination($pgn_e);
         }
 
         // Get and return html
-        $footer = $tags->getSnippet('data_table.footer', '', $footer_attr);
+        $footer = $this->tags->getSnippet('data_table.footer', '', $footer_attr);
         return str_replace('~table.footer~', $footer, $html);
     }
 

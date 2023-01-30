@@ -5,7 +5,7 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Interfaces\{LoaderInterface, TagInterface};
 use Psr\Http\Message\UriInterface;
 
@@ -16,6 +16,9 @@ use Psr\Http\Message\UriInterface;
 class t_breadcrumbs implements TagInterface
 {
 
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
+
     /**
      * Render
      */
@@ -23,13 +26,13 @@ class t_breadcrumbs implements TagInterface
     {
 
         // Check for loader
-        if (!$loader = Di::get(LoaderInterface::class)) { 
+        if (!$loader = $this->cntr->get(LoaderInterface::class)) { 
             return '';
         }
 
         // Get items from container
-        $uri = Di::get(UriInterface::class);
-        $tags = Di::get(Tags::class);
+        $uri = $this->cntr->get(UriInterface::class);
+        $tags = $this->cntr->get(Tags::class);
 
         // Get crumbs
         $crumbs = $loader->getBreadcrumbs($e, $uri);

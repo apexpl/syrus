@@ -5,7 +5,7 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -14,6 +14,9 @@ use Apex\Syrus\Interfaces\TagInterface;
  */
 class t_ft_submit implements TagInterface
 {
+
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
 
     /**
      * Render
@@ -25,7 +28,7 @@ class t_ft_submit implements TagInterface
         $align = $e->getAttr('align') ?? 'center';
 
         // Get submit
-        $tags = Di::get(Tags::class);
+        $tags = $this->cntr->get(Tags::class);
         $contents = $tags->submit($e);
 
         // Get and return form table row

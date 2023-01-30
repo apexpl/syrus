@@ -5,7 +5,7 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Interfaces\{LoaderInterface, TagInterface};
 use Psr\Http\Message\UriInterface;
 
@@ -15,22 +15,26 @@ use Psr\Http\Message\UriInterface;
 class t_social_links implements TagInterface
 {
 
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
+
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
+    #[Inject(LoaderInterface::class)]
+    private LoaderInterface $loader;
+
+    #[Inject(UriInterface::class)]
+    private UriInterface $uri;
+
     /**
      * Render
      */
     public function render(string $html, StackElement $e):string
     {
-        // Get loader
-        if (!$loader = Di::get(LoaderInterface::class)) { 
-            return '';
-        }
-
-        // Get items from container
-        $uri = Di::get(UriInterface::class);
-        $tags = Di::get(Tags::class);
 
         // Get social networks
-        $networks = $loader->getSocialLinks($e, $uri);
+        $networks = $this->loader->getSocialLinks($e, $this->uri);
 
         // Create items
         $items = '';

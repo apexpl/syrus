@@ -5,9 +5,7 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
-
 
 /**
  * Renders a specific template tag.  Please see developer documentation for details.
@@ -15,14 +13,14 @@ use Apex\Syrus\Interfaces\TagInterface;
 class t_pagination implements TagInterface
 {
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
     public function render(string $html, StackElement $e):string
     {
-
-        // Get tags instance
-        $tags = Di::get(Tags::class);
 
         // Initialize
         $current_page = $e->getAttr('current_page') ?? 1;
@@ -62,7 +60,7 @@ class t_pagination implements TagInterface
 
             // Add to pagination items
             if ($page_num == $current_page) { 
-                $items .= $tags->getSnippet('pagination.active_item', '', ['page' => (string) $page_num]);
+                $items .= $this->tags->getSnippet('pagination.active_item', '', ['page' => (string) $page_num]);
             } else {
                 $items .= $this->paginationItem((string) $page_num, $href, (int) $page_num);
             }
@@ -102,8 +100,7 @@ class t_pagination implements TagInterface
         ];
 
         // Generate HTML, and return
-        $tags = Di::get(Tags::class);
-        return $tags->getSnippet('pagination.item', '', $item_attr);
+        return $this->tags->getSnippet('pagination.item', '', $item_attr);
     }
 
 }

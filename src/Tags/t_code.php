@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 /**
@@ -13,6 +12,9 @@ use Apex\Syrus\Interfaces\TagInterface;
  */
 class t_code implements TagInterface
 {
+
+    #[Inject(Tags::class)]
+    private Tags $tags;
 
     /**
      * Render
@@ -23,7 +25,6 @@ class t_code implements TagInterface
         // Initialize
         $linenums = $e->getAttr('linenums') ?? 0;
         $lang = $e->getAttr('lang') ?? 'php';
-        $tags = Di::make(Tags::class);
 
         // Set classes
         $code_tag = "<code class=\"language-" . $lang . "\" data-prismjs-copy=\"Copy to Clipboard\" data-prismjs-copy-error=\"Error Copying to Clipboard\" data-prismjs-copy-success=\"Copied to Clipboard\">";
@@ -37,7 +38,7 @@ class t_code implements TagInterface
         ]);
 
         // Set html
-        $html = $tags->getSnippet('code', $code, ['language' => $lang]);
+        $html = $this->tags->getSnippet('code', $code, ['language' => $lang]);
         return $html;
     }
 

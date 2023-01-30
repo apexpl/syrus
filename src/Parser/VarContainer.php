@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Apex\Syrus\Parser;
 
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Interfaces\LoaderInterface;
 use Apex\Debugger\Interfaces\DebuggerInterface;
 use Apex\Syrus\Exceptions\SyrusInvalidArgumentException;
@@ -25,6 +25,9 @@ class VarContainer
     protected string $theme = '';
     protected bool $has_errors = false;
     protected $rpc_enabled = true;
+
+    // Interfaces
+    public ApexContainerInterface $cntr;
     public ?DebuggerInterface $debugger = null;
 
     /**
@@ -182,7 +185,7 @@ class VarContainer
         // Set vars
         $vars = [
             'theme' => $this->theme, 
-            'theme_uri' => rtrim(Di::get('syrus.theme_uri'), '/') . '/' . $this->theme, 
+            'theme_uri' => rtrim($this->cntr->get('syrus.theme_uri'), '/') . '/' . $this->theme, 
             'current_year' => date('Y')
         ];
 
@@ -233,7 +236,7 @@ class VarContainer
 
         // Get theme from loader, if needed
         if ($this->theme == '') { 
-            $loader = Di::make(LoaderInterface::class);
+            $loader = $this->cntr->make(LoaderInterface::class);
             $this->theme = $loader->getTheme();
         }
 

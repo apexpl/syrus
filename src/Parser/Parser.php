@@ -5,7 +5,6 @@ namespace Apex\Syrus\Parser;
 
 use Apex\Syrus\Parser\{Common, Stack};
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Debugger\Interfaces\DebuggerInterface;
 use Apex\Syrus\Interfaces\LoaderInterface;
 
@@ -15,12 +14,19 @@ use Apex\Syrus\Interfaces\LoaderInterface;
 class Parser
 {
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
+    #[Inject(LoaderInterface::class)]
+    private LoaderInterface $loader;
+
+    #{Inject(DebuggerInterface::class)]
+    private ?DebuggerInterface $debugger;
+
     /**
     * Constructor
      */
     public function __construct(
-        private LoaderInterface $loader,
-        private ?DebuggerInterface $debugger = null,  
         private string $tpl_code = '',
         private array $vars = [], 
         private bool $parse_nocache = true
@@ -95,14 +101,13 @@ class Parser
 
         // Initialize
         $html = $stack->getTplCode();
-        $tags = Di::makeset(Tags::class);
 
         // Go through stack
         while ($e = $stack->pull()) { 
 
             // Parse tag
             $tag_name = $e->getTag();
-            $output = $tags->$tag_name($e);
+            $output = $this->tags->$tag_name($e);
 
             // Replace tag output
             $html = str_replace($e->getReplace(), $output, $html);

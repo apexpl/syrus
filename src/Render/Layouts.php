@@ -4,11 +4,10 @@ declare(strict_types = 1);
 namespace Apex\Syrus\Render;
 
 use Apex\Syrus\Syrus;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Parser\Common;
 use Apex\Syrus\Interfaces\LoaderInterface;
 use Apex\Syrus\Exceptions\SyrusLayoutNotExistsException;
-
 
 /**
  * Handles theme layouts, mainly applying them to templates
@@ -16,14 +15,20 @@ use Apex\Syrus\Exceptions\SyrusLayoutNotExistsException;
 class Layouts
 {
 
+    #[Inject(Syrus::class)]
+    private Syrus $syrus;
+
+    #[Inject(LoaderInterface::class)]
+    private LoaderInterface $loader;
+
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
 
     /**
      * Construct
      */
     public function __construct(
-        private string $tpl_code, 
-        private Syrus $syrus, 
-        private LoaderInterface $loader 
+        private string $tpl_code 
     ) { 
 
     }
@@ -68,7 +73,7 @@ class Layouts
             $theme = $this->loader->getTheme($file);
             $this->syrus->setTheme($theme);
         }
-        $this->theme_dir = rtrim(Di::get('syrus.template_dir'), '/') . '/themes/' . $theme;
+        $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/themes/' . $theme;
 
         // Check for <s:layout> tag
         $layout = 'default';
@@ -98,7 +103,7 @@ class Layouts
     {
 
         // Check container config
-        if (Di::get('syrus.auto_extract_title') !== true) { 
+        if ($this->cntr->get('syrus.auto_extract_title') !== true) { 
             return;
         }
 
@@ -108,7 +113,7 @@ class Layouts
         }
 
         // Set page title
-        Di::set('syrus.page_title', $match[2]);
+        $this->cntr->set('syrus.page_title', $match[2]);
         $this->tpl_code = str_replace($match[0], '', $this->tpl_code);
     }
 

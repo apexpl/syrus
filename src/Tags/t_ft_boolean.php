@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -14,6 +13,9 @@ use Apex\Syrus\Interfaces\TagInterface;
  */
 class t_ft_boolean implements TagInterface
 {
+
+    #[Inject(Tags::class)]
+    private Tags $tags;
 
     /**
      * Render
@@ -28,7 +30,6 @@ class t_ft_boolean implements TagInterface
         }
 
         // Get contents
-        $tags = Di::get(Tags::class);
         $contents = $tags->boolean($e);
 
         // Get and return form table row

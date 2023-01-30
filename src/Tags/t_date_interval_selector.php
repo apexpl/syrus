@@ -6,7 +6,6 @@ namespace Apex\Syrus\Tags;
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Interfaces\TagInterface;
 
-
 /**
  * Renders a specific template tag.  Please see developer documentation for details.
  */

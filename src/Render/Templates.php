@@ -5,7 +5,7 @@ namespace Apex\Syrus\Render;
 
 use Apex\Syrus\Syrus;
 use Apex\Syrus\Parser\{Common, Parser};
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Apex\Syrus\Interfaces\LoaderInterface;
 use Apex\Debugger\Interfaces\DebuggerInterface;
@@ -20,17 +20,21 @@ use Psr\Http\Message\ServerRequestInterface;
 class Templates
 {
 
-    /**
-     * Constructor
-     */
-    public function __construct(
-        private Syrus $syrus, 
-        private LoaderInterface $loader, 
-        private ?CacheItemPoolInterface $cache = null, 
-        private ?DebuggerInterface $debugger = null 
-    ) {
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
 
-    }
+    #[Inject(Syrus::class)]
+    private Syrus $syrus;
+
+    #[Inject(LoaderInterface::class)]
+    private LoaderInterface $loader;
+
+    #[Inject(CacheItemPoolInterface::class)]
+    private ?CacheItemPoolInterface $cache = null;
+
+    #[Inject(DebuggerInterface::class)]
+    private ?DebuggerInterface $debugger = null;
+
     /**
      * Render template
      */
@@ -38,7 +42,7 @@ class Templates
     {
 
         // Send RPC call via cluster, if needed
-        if (Di::get('syrus.use_cluster') === true && class_exists(Dispatcher::class) && $this->syrus->getRpcEnabled() === true) { 
+        if ($this->cntr->get('syrus.use_cluster') === true && class_exists(Dispatcher::class) && $this->syrus->getRpcEnabled() === true) { 
             $this->dispatchRPcCall($this->syrus->getTemplateFile());
         }
 
@@ -56,7 +60,7 @@ class Templates
         $tpl_code = $this->getTplCode();
 
         // Apply layout
-        $layouts = Di::make(Layouts::class, [
+        $layouts = $this->cntr->make(Layouts::class, [
             'tpl_code' => $tpl_code
         ]);
         $tpl_code = $layouts->apply();
@@ -68,7 +72,7 @@ class Templates
         $nocache = $this->cache === null || $this->loader->checkNoCachePage($file) === true ? true : false;
 
         // Render template
-        $parser = Di::make(Parser::class, [
+        $parser = $this->cntr->make(Parser::class, [
             'tpl_code' => $tpl_code, 
             'vars' => $this->syrus->gatherVars(), 
             'parse_nocache' => $nocache
@@ -82,7 +86,7 @@ class Templates
 
         // Add to cache, if available
         $item->set($html);
-        if (($ttl = Di::get('syrus.cache_ttl')) !== null) { 
+        if (($ttl = $this->cntr->get('syrus.cache_ttl')) !== null) { 
             $item->expiresAfter((int) $ttl);
         }
         $this->cache?->save($item);
@@ -98,7 +102,7 @@ class Templates
     {
 
         // Check container config
-        if (!$php_nm = Di::get('syrus.php_namespace')) { 
+        if (!$php_nm = $this->cntr->get('syrus.php_namespace')) { 
             return;
         }
 
@@ -107,23 +111,28 @@ class Templates
         if (!class_exists($php_class)) { 
             return;
         }
-        $obj = Di::make($php_class);
+        $obj = $this->cntr->make($php_class);
 
         // Get request method
-        if (!$request = Di::get(ServerRequestInterface::class)) {
+        if (!$request = $this->cntr->get(ServerRequestInterface::class)) {
             $method = $_SERVER['REQUEST_METHOD'];
         } else {
             $method = $request->getMethod();
         }
 
+        // Check require_http_method if necessary
+        if ($this->syrus->require_http_method === true && !method_exists($obj, strtolower($method))) {
+            $this->syrus->setTemplateFile('404', true);
+        }
+
         // Check for http specific method
         if (method_exists($obj, strtolower($method))) {
-            Di::call([$obj, strtolower($method)]);
+            $this->cntr->call([$obj, strtolower($method)]);
         }
 
         // Call render method, if needed
         if (method_exists($obj, 'render')) {
-            Di::call([$obj, 'render']);
+            $this->cntr->call([$obj, 'render']);
         }
 
         // Render again, if template has changed
@@ -140,7 +149,7 @@ class Templates
     {
 
         // Ensure message class exists
-        $msg_class = Di::get('syrus.rpc_message_request');
+        $msg_class = $this->cntr->get('syrus.rpc_message_request');
         if (!class_exists($msg_class)) { 
             throw new SyrusRpcException("Message request class does not exist for RPC call at, $msg_class");
         }
@@ -204,7 +213,7 @@ class Templates
     {
 
         // Get template file
-        $template_dir = rtrim(Di::get('syrus.template_dir'), '/');
+        $template_dir = rtrim($this->cntr->get('syrus.template_dir'), '/');
         $file = $this->syrus->getTemplateFile();
         $tpl_file = $template_dir . '/html/' . $file;
 
@@ -223,5 +232,6 @@ class Templates
 
 
 }
+
 
 

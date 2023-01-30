@@ -16,14 +16,6 @@ class ExampleLoader extends AbstractLoader implements LoaderInterface
 {
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->loadYamlConfig();
-    }
-
-    /**
      * Get breadcrumbs
      *
      * Returns associative array, keys being the name displayed within the web browser, and values being the href to link to.  

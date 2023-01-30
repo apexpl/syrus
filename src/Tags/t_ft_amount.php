@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -14,6 +13,9 @@ use Apex\Syrus\Interfaces\TagInterface;
  */
 class t_ft_amount implements TagInterface
 {
+
+    #[Inject(Tags::class)]
+    private Tags $tags;
 
     /**
      * Render
@@ -28,11 +30,10 @@ class t_ft_amount implements TagInterface
         }
 
         // Get contents
-        $tags = Di::get(Tags::class);
-        $contents = $tags->amount($e);
+        $contents = $this->tags->amount($e);
 
         // Get and return form table row
-        return $tags->getSnippet('ft_twocol', $contents, $attr);
+        return $this->tags->getSnippet('ft_twocol', $contents, $attr);
     }
 
 }

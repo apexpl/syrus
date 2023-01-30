@@ -6,10 +6,10 @@ namespace Apex\Syrus;
 use Apex\Syrus\Bootloader;
 use Apex\Syrus\Render\Templates;
 use Apex\Syrus\Parser\{Parser, VarContainer, Common};
-use Apex\Container\Di;
+use Apex\Container\Container;
 use Psr\Http\Message\UriInterface;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Exceptions\SyrusTemplateNotFoundException;
-
 
 /**
  * Syrus Template Engine.
@@ -21,12 +21,14 @@ class Syrus extends VarContainer
      * Instantiate new instance of Syrus Template Engine.
      */
     public function __construct(
-        private ?string $container_file = ''
+        private ?string $container_file = '',
+        private ?ApexContainerInterface $container = null,
+        public bool $require_http_method = false
     ) {
 
         // Setup container
-        Bootloader::init($this, $this->container_file);
-        $this->template_dir = rtrim(Di::get('syrus.template_dir'), '/');
+        $this->cntr = Bootloader::init($this, $this->container_file, $container);
+        $this->template_dir = rtrim($this->cntr->get('syrus.template_dir'), '/');
 
     }
 
@@ -37,7 +39,7 @@ class Syrus extends VarContainer
     {
 
         // Check auto-routing
-        if (Di::get('syrus.enable_autorouting') === true && $file == '') { 
+        if ($this->cntr->get('syrus.enable_autorouting') === true && $file == '') { 
             $file = $this->doAutoRouting();
         }
         if ($file != '') { 
@@ -45,7 +47,7 @@ class Syrus extends VarContainer
         }
 
         // Render the template
-        $tparser = Di::make(Templates::class);
+        $tparser = $this->cntr->make(Templates::class);
         $html = $tparser->render();
 
         // Render again, if no-cache items
@@ -67,7 +69,7 @@ class Syrus extends VarContainer
         $html = Common::mergeVars($html, $this->getVars());
 
         // Render html
-        $parser = Di::make(Parser::class, [
+        $parser = $this->cntr->make(Parser::class, [
             'tpl_code' => $html, 
             'vars' => $this->gatherVars(), 
             'parse_nocache' => true
@@ -88,7 +90,7 @@ class Syrus extends VarContainer
 
         // Get URI
         if ($path == '') { 
-            $uri = Di::get(UriInterface::class);
+            $uri = $this->cntr->get(UriInterface::class);
             $path = $uri->getPath();
         }
         $file = $path == '/' ? 'index' : trim($path, '/');

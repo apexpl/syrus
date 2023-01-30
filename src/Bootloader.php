@@ -4,7 +4,8 @@ declare(strict_types = 1);
 namespace Apex\Syrus;
 
 use Apex\Syrus\Syrus;
-use Apex\Container\Di;
+use Apex\Container\{Container, Di};
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Debugger\Interfaces\DebuggerInterface;
 use Apex\Syrus\Interfaces\LoaderInterface;
 use League\Uri\Http;
@@ -21,8 +22,13 @@ class Bootloader
     /**
      * Setup container
      */
-    public static function init(Syrus $syrus, ?string $container_file = ''):void
+    public static function init(Syrus $syrus, ?string $container_file = '', ?ApexContainerInterface $container = null):ApexContainerInterface
     {
+
+        // Instantiate container, if null
+        if ($container === null) {
+            $container = new Container();
+        }
 
         // Use default, if none specified
         if ($container_file !== null && $container_file == '') { 
@@ -31,29 +37,32 @@ class Bootloader
 
         // Build container
         if ($container_file !== null) { 
+            $container->buildContainer($container_file);
             Di::buildContainer($container_file);
         }
 
         // Set UriInterface
-        if (!Di::has(UriInterface::class)) {
-            Di::set(UriInterface::class, [self::class, 'getUriInterface']);
-            Di::markItemAsService(UriInterface::class);
+        if (!$container->has(UriInterface::class)) {
+            $container->set(UriInterface::class, [self::class, 'getUriInterface']);
+            $container->markItemAsService(UriInterface::class);
         }
 
         // Mark items as services
-        Di::markItemAsService(CacheItemPoolInterface::class);
-        Di::markItemAsService(LoaderInterface::class);
+        $container->markItemAsService(CacheItemPoolInterface::class);
+        $container->markItemAsService(LoaderInterface::class);
+        Di::set(ApexContainerInterface::class, $container);
 
         // Set debugger
         if (class_exists(DebuggerInterface::class)) { 
-            Di::markItemAsService(DebuggerInterface::class);
-            $syrus->debugger = Di::get(DebuggerInterface::class);
+            $container->markItemAsService(DebuggerInterface::class);
+            $syrus->debugger = $container->get(DebuggerInterface::class);
         } else { 
-        Di::set(DebuggerInterface::class, null);
-    }
+            $container->set(DebuggerInterface::class, null);
+        }
 
-        // Set Syrus instance in container
-        Di::set(Syrus::class, $syrus);
+        // Set Syrus instance in container, and return
+        $container->set(Syrus::class, $syrus);
+        return $container;
     }
 
     /**
@@ -72,7 +81,9 @@ class Bootloader
         }
 
         // Set and return
+        $cntr = Di::get(ApexContainerInterface::class);
         Di::set(UriInterface::class, $uri);
+        $cntr->set(UriInterface::class, $uri);
         return $uri;
     }
 

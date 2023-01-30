@@ -5,7 +5,7 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -14,6 +14,12 @@ use Apex\Syrus\Interfaces\TagInterface;
  */
 class t_ft_date_interval_selector implements TagInterface
 {
+
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
+
+    #[Inject(Tags::class)]
+     private Tags $tags;
 
     /**
      * Render
@@ -28,11 +34,10 @@ class t_ft_date_interval_selector implements TagInterface
         }
 
         // Get contents
-        $tags = Di::get(Tags::class);
-        $contents = $tags->date_interval_selector($e);
+        $contents = $this->tags->date_interval_selector($e);
 
         // Get and return form table row
-        return $tags->getSnippet('ft_twocol', $contents, $attr);
+        return $this->tags->getSnippet('ft_twocol', $contents, $attr);
     }
 
 }

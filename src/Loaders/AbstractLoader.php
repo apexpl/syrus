@@ -1,15 +1,15 @@
 <?php
 declare(strict_types = 1);
 
-
 namespace Apex\Syrus\Loaders;
 
 use Apex\Syrus\Syrus;
+use Apex\Container\Di;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Exceptions\SyrusYamlException;
 use Apex\Syrus\Interfaces\AbstractLoaderInterface;
 
@@ -23,11 +23,18 @@ class AbstractLoader implements AbstractLoaderInterface
     // Properties
     public array $yaml = [];
 
+    #[Inject(ApexContainerInterface::class)]
+    protected ApexContainerInterface $cntr;
+
     /**
      * Constructor
      */
     public function __construct()
     {
+
+        $this->cntr = Di::get(ApexContainerInterface::class);
+    $this->cache = Di::get(CachePoolItemInterface::class);
+
         $this->loadYamlConfig();
     }
 
@@ -37,18 +44,15 @@ class AbstractLoader implements AbstractLoaderInterface
     protected function loadYamlConfig():void
     {
 
-        // Get cache from container
-        $cache = Di::get(CacheItemPoolInterface::class);
-
         // Check cache
-        $item = $cache?->getItem('syrus:site_yaml');
+        $item = $this->cache?->getItem('syrus:site_yaml');
         if ($item?->isHit() === true) { 
             $this->yaml = $item->get();
             return;
         }
 
         // Get YAML file
-        if (!$yaml_file = Di::get('syrus.site_yml')) { 
+        if (!$yaml_file = $this->cntr->get('syrus.site_yml')) { 
             throw new SyrusYamlException("Unable to load site configuration, as no 'syrus.site_yml' item exists within DI container.");
         } elseif (!file_exists($yaml_file)) { 
             throw new SyrusYamlException("Unable to load site configuration, as YAML file does not exist at $yaml_file");
@@ -62,16 +66,16 @@ class AbstractLoader implements AbstractLoaderInterface
         }
 
         // Return, if no cache
-        if ($cache === null) { 
+        if ($this->cache === null) { 
             return;
     }
 
         // Set cache item
         $item->set($this->yaml);
-        if (($ttl = Di::get('syrus.cache_ttl')) !== null) { 
+        if (($ttl = $this->cntr->get('syrus.cache_ttl')) !== null) { 
             $item->expiresAfter((int) $ttl);
         }
-        $cache->save($item);
+        $this->cache->save($item);
     }
 
     /**
@@ -86,7 +90,7 @@ class AbstractLoader implements AbstractLoaderInterface
         }
 
         // Get uri
-        $syrus = Di::get(Syrus::class);
+        $syrus = $this->cntr->get(Syrus::class);
         $file = $syrus->getTemplateFile();
 
         // Go through themes
@@ -119,7 +123,7 @@ class AbstractLoader implements AbstractLoaderInterface
         $yaml_vars = $this->yaml['page_vars'][$var_name];
 
         // Get template file
-        $syrus = Di::get(Syrus::class);
+        $syrus = $this->cntr->get(Syrus::class);
         $file = $syrus->getTemplateFile();
 
         // Go through page vars

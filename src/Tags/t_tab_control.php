@@ -5,7 +5,7 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
+use Apex/Container/Interfaces/ApexContainerInterface;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -14,6 +14,12 @@ use Apex\Syrus\Interfaces\TagInterface;
  */
 class t_tab_control implements TagInterface
 {
+
+    #[Inject(ApexContainerInterface::class)]
+    private ApexContainerInterface $cntr;
+
+    #[Inject(Tags::class)]
+    private Tags $tags;
 
     /**
      * Render
@@ -24,7 +30,6 @@ class t_tab_control implements TagInterface
         // Initialize
         list($tab_num, $nav_html, $page_html) = [1, '', ''];
         $active_tab = $e->getAttr('active_tab') ?? 1;
-        $tags = Di::get(Tags::class);
         $active_html = $tags->getSnippet('tab_control.css_active', '', []);
 
         // Go through tab pages
@@ -42,9 +47,9 @@ class t_tab_control implements TagInterface
             // Get page html
             $page_attr = [
                 'tab_num' => $tab_num, 
-                'active' => $active_tab == $tab_num ? $tags->getSnippet('tab_control.css_active', '', []) : ''
+                'active' => $active_tab == $tab_num ? $this->tags->getSnippet('tab_control.css_active', '', []) : ''
             ];
-            $page_html .= $tags->getSnippet('tab_control.page', $pg->getBody(), $page_attr);
+            $page_html .= $this->tags->getSnippet('tab_control.page', $pg->getBody(), $page_attr);
 
         $tab_num++; } 
 

@@ -5,7 +5,7 @@ namespace APex\Syrus\Render;
 
 use Apex\Syrus\Syrus;
 use Apex\Syrus\Parser\StackElement;
-use Apex\Container\Di;
+use Apex\Container\Interfaces\ApexContainerInterface;
 use Apex\Syrus\Exceptions\{SyrusInvalidTagMethodExceptionSyrusYamlException};
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -28,14 +28,15 @@ class Tags
      * Constructor
      */
     public function __construct(
-        private Syrus $syrus, 
-        private ?CacheItemPoolInterface $cache = null 
-    ) { 
+        private Syrus $syrus,
+        private ApexContainerInterface $cntr,
+        private ?CacheItemPoolInterface $cache = null
+    ) {
 
         // Set variables
         $this->theme = $syrus->getTheme();
-        $this->theme_dir = rtrim(Di::get('syrus.template_dir'), '/') . '/themes/' . $this->theme;
-        $this->tag_namespaces = Di::get('syrus.tag_namespaces');
+        $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/themes/' . $this->theme;
+        $this->tag_namespaces = $this->cntr->get('syrus.tag_namespaces');
 
     }
 
@@ -64,7 +65,7 @@ class Tags
             }
 
             // Render html via tag specific class
-            $tag = Di::make($tag_class);
+            $tag = $this->cntr->make($tag_class);
             $html = $tag->render($html, $e);
 
             // Break

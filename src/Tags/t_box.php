@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -15,6 +14,9 @@ use Apex\Syrus\Interfaces\TagInterface;
 class t_box implements TagInterface
 {
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
@@ -22,7 +24,6 @@ class t_box implements TagInterface
     {
 
         // Initialize
-        $tags = Di::get(Tags::class);
         $replace = [
             '~box.header~' => '', 
             '~box.footer~' => ''
@@ -31,14 +32,14 @@ class t_box implements TagInterface
         // Check for header
         $header = $e->getChildren('box_header');
         if (($he = array_shift($header)) !== null) { 
-            $replace['~box.header~'] = $tags->getSnippet('box.header', $he->getBody(), $he->getAttrAll());
+            $replace['~box.header~'] = $this->tags->getSnippet('box.header', $he->getBody(), $he->getAttrAll());
             $html = str_replace($he->getReplace(), '', $html);
         }
 
         // Check for footer
         $footer = $e->getChildren('box_footer');
         if (($fe = array_shift($footer)) !== null) { 
-            $replace['~box.footer~'] = $tags->getSnippet('box.footer', $fe->getBody(), $fe->getAttrAll());
+            $replace['~box.footer~'] = $this->tags->getSnippet('box.footer', $fe->getBody(), $fe->getAttrAll());
             $html = str_replace($fe->getReplace(), '', $html);
         }
 

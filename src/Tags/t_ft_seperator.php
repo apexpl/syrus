@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -15,6 +14,9 @@ use Apex\Syrus\Interfaces\TagInterface;
 class t_ft_seperator implements TagInterface
 {
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
@@ -22,11 +24,10 @@ class t_ft_seperator implements TagInterface
     {
 
         // Get contents
-        $tags = Di::get(Tags::class);
         $contents = $e->getAttr('label') ?? 'No Label';
 
         // Return
-        return $tags->getSnippet('ft_onecol', $contents, $e->getAttrAll());
+        return $this->tags->getSnippet('ft_onecol', $contents, $e->getAttrAll());
     }
 
 }

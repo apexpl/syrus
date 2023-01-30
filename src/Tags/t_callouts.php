@@ -5,7 +5,6 @@ namespace Apex\Syrus\Tags;
 
 use Apex\Syrus\Parser\StackElement;
 use Apex\Syrus\Render\Tags;
-use Apex\Container\Di;
 use Apex\Syrus\Interfaces\TagInterface;
 
 
@@ -15,6 +14,9 @@ use Apex\Syrus\Interfaces\TagInterface;
 class t_callouts implements TagInterface
 {
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
@@ -22,7 +24,7 @@ class t_callouts implements TagInterface
     {
 
         // Check for callout in attributes
-    if (($message = $e->getAttr('message') ?? '') != '') { 
+        if (($message = $e->getAttr('message') ?? '') != '') { 
             $type = $e->getAttr('type') ?? 'success';
             $messages = [$message];
         } else { 
@@ -36,9 +38,8 @@ class t_callouts implements TagInterface
         }
 
         // Get CSS / icon arrays
-        $tags = Di::get(Tags::class);
-        $css_aliases = json_decode($tags->getSnippet('callouts.css', '', []), true);
-        $icons = json_decode($tags->getSnippet('callouts.icon', '', []), true);
+        $css_aliases = json_decode($this->tags->getSnippet('callouts.css', '', []), true);
+        $icons = json_decode($this->tags->getSnippet('callouts.icon', '', []), true);
 
         // Set replace
         $replace = [
