@@ -19,6 +19,9 @@ class t_breadcrumbs implements TagInterface
     #[Inject(ApexContainerInterface::class)]
     private ApexContainerInterface $cntr;
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
@@ -41,7 +44,7 @@ class t_breadcrumbs implements TagInterface
         $items = '';
         foreach ($crumbs as $name => $href) { 
             $tag_name = $href == '' ? 'breadcrumbs.active_item' : 'breadcrumbs.item';
-            $items .= $tags->getSnippet($tag_name, '', ['name' => $name, 'href' => $href]);
+            $items .= $this->tags->getSnippet($tag_name, '', ['name' => $name, 'href' => $href]);
         }
 
         // Replace and return

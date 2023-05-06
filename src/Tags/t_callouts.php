@@ -50,7 +50,7 @@ class t_callouts implements TagInterface
 
         // Parse messages
         foreach ($messages as $msg) { 
-            $replace['~callout.messages~'] .= $tags->getSnippet('callouts.message', '', ['message' => $msg]);
+            $replace['~callout.messages~'] .= $this->tags->getSnippet('callouts.message', '', ['message' => $msg]);
         }
         $replace['~callout.messages~'] = strtr($replace['~callout.messages~'], $replace);
 

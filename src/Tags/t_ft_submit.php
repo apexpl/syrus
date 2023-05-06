@@ -18,6 +18,9 @@ class t_ft_submit implements TagInterface
     #[Inject(ApexContainerInterface::class)]
     private ApexContainerInterface $cntr;
 
+    #[Inject(Tags::class)]
+    private Tags $tags;
+
     /**
      * Render
      */
@@ -29,10 +32,10 @@ class t_ft_submit implements TagInterface
 
         // Get submit
         $tags = $this->cntr->get(Tags::class);
-        $contents = $tags->submit($e);
+        $contents = $this->tags->submit($e);
 
         // Get and return form table row
-        return $tags->getSnippet('ft_onecol', $contents, ['align' => $align]);
+        return $this->tags->getSnippet('ft_onecol', $contents, ['align' => $align]);
     }
 
 }

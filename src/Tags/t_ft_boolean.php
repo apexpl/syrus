@@ -16,7 +16,7 @@ class t_ft_boolean implements TagInterface
 
     #[Inject(Tags::class)]
     private Tags $tags;
-
+g
     /**
      * Render
      */
@@ -30,10 +30,10 @@ class t_ft_boolean implements TagInterface
         }
 
         // Get contents
-        $contents = $tags->boolean($e);
+        $contents = $this->tags->boolean($e);
 
         // Get and return form table row
-        return $tags->getSnippet('ft_twocol', $contents, $attr);
+        return $this->tags->getSnippet('ft_twocol', $contents, $attr);
     }
 
 }
