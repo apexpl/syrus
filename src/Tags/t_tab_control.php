@@ -30,7 +30,7 @@ class t_tab_control implements TagInterface
         // Initialize
         list($tab_num, $nav_html, $page_html) = [1, '', ''];
         $active_tab = $e->getAttr('active_tab') ?? 1;
-        $active_html = $tags->getSnippet('tab_control.css_active', '', []);
+        $active_html = $this->tags->getSnippet('tab_control.css_active', '', []);
 
         // Go through tab pages
         $tab_pages = $e->getChildren('tab_page');
@@ -42,7 +42,7 @@ class t_tab_control implements TagInterface
                 'active' => $tab_num == $active_tab ? $active_html : '', 
                 'name' => $pg->getAttr('name') ?? "Unnamed $tab_num"
             ];
-            $nav_html .= $tags->getSnippet('tab_control.nav_item', '', $nav_attr);
+            $nav_html .= $this->tags->getSnippet('tab_control.nav_item', '', $nav_attr);
 
             // Get page html
             $page_attr = [
