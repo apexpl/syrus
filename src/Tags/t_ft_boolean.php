@@ -16,7 +16,7 @@ class t_ft_boolean implements TagInterface
 
     #[Inject(Tags::class)]
     private Tags $tags;
-g
+
     /**
      * Render
      */

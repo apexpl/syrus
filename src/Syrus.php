@@ -125,6 +125,51 @@ class Syrus extends VarContainer
         return $filename;
     }
 
+/**
+     * Check reCaptcha
+     */
+    public function checkRecaptcha():bool
+    {
+
+        // Check if reCaptcha enabled
+        if ($this->cntr->get('syrus.recaptcha_site_key') == '') {
+            return true;
+        }
+
+        // Set request
+        $request = [
+            'secret' => $this->cntr->get('syrus.recaptcha_secret_key'),
+            'response' => $_POST['g-recaptcha-response'],
+            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
+        ];
+
+        // Send http request
+        $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-type' => 'application/x-www-form-urlencoded']);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request));
+
+        // Send http request
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Decode JSON  
+        if (!$vars = json_decode($response, true)) { 
+        return false;
+        }
+
+        // Check response
+        if (isset($vars['success']) && $vars['success'] == true) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
 
 

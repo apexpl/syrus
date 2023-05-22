@@ -45,6 +45,12 @@ return [
     'syrus.auto_extract_title' => true, 
 
     /**
+     * If using <s:recaptch> tag, the reCaptcha site and secret keys.
+     */
+    'syrus.recaptcha_site_key' => '',
+    'syrus.recaptcha_secret_key' => '',
+
+    /**
      * Use Cluster.  If enabled and if apex/cluster is installed, will dispatch a RPC call for every template parsed, providing horizontal scaling.
      */
     'syrus.use_cluster' => false, 
