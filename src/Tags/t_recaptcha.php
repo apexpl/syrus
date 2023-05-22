@@ -24,7 +24,7 @@ class t_recaptcha implements TagInterface
     {
 
         // Check if site key defined
-        if ($this->cntr->get->syrus.recaptcha_site_key') == '') {
+        if ($this->cntr->get('syrus.recaptcha_site_key') == '') {
             return '';
         }
 
