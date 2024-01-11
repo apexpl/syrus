@@ -151,7 +151,9 @@ class Templates
 
         // Ensure message class exists
         $msg_class = $this->cntr->get('syrus.rpc_message_request');
-        if (!class_exists($msg_class)) { 
+        if (!class_exists(\Apex\Cluster\Cluster::class)) {
+            throw new SyrusRpcException("The apex/cluster package is not installed and RPC calls are enabled.  Please either disable RPC calls via the ~/config/container.php file or install the Cluster pacakge with the command 'composer require apex/cluster'");
+        } elseif (!class_exists($msg_class)) { 
             throw new SyrusRpcException("Message request class does not exist for RPC call at, $msg_class");
         }
 
