@@ -73,7 +73,13 @@ class Layouts
             $theme = $this->loader->getTheme($file);
             $this->syrus->setTheme($theme);
         }
-        $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/themes/' . $theme;
+
+        // Get theme dir
+        if ($theme == '') {
+            $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/theme';
+        } else {
+            $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/themes/' . $theme;
+        }
 
         // Check for <s:layout> tag
         $layout = 'default';

@@ -22,8 +22,7 @@ class Syrus extends VarContainer
      */
     public function __construct(
         private ?string $container_file = '',
-        private ?ApexContainerInterface $container = null,
-        public bool $require_http_method = false
+        private ?ApexContainerInterface $container = null
     ) {
 
         // Setup container

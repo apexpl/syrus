@@ -18,6 +18,12 @@ return [
     'syrus.template_dir' => realpath(__DIR__ . '/../views'), 
 
     /**
+     8 Theme directory - Contains all theme related files including layouts, includes, etc.  Generally defaults 
+     * to tetemplate_dir/themes.
+     */
+    'syrus.theme_dir' => realpath(__DIR__ . '/../views/themes'), 
+
+    /**
      * site.yaml file location.  See docs for details on this file, and it's makeup.
      */
     'syrus.site_yml' => __DIR__ . '/site.yml', 
@@ -35,9 +41,28 @@ return [
     'syrus.php_namespace' => "\\Apex\\Syrus\\Views\\Php", 
 
     /**
+     * Whether or not to use multiple themes, or just one single theme.
+     */
+    'syrus.use_multiple_themes' => true,
+
+    /**
+     * Whether or not to require the PHP method within __template_dir__/php/uri.php to contain the 
+     * HTTP method function (eg. get(), post(), etc.) in order to display the .html template.  If true and the 
+     * PHP class does not contain the appropriate method, a 404 page will be displayed.
+     */
+    'syrus.require_php_method' => false,
+
+    /**
      * Enable auto-routing.  If enabled, template file to render will be automatically determined based on request URI.
      */
     'syrus.enable_autorouting' => true, 
+
+    /**
+     * If ture and corresponding .php file to view exists, it must contain either 
+     * render() method or HTTP method specific function (eg. get(), post(), etc.).  Otherwise, 
+     * will give 404 page not found error.
+     */
+    'syrus.require_http_method' => false,
 
     /**
      * Auto-extract page titles.  If enabled, will remote the first set of <h1> ... </h1> tags from each template, and use them as page header within layout.

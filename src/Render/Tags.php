@@ -35,7 +35,11 @@ class Tags
 
         // Set variables
         $this->theme = $syrus->getTheme();
-        $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/themes/' . $this->theme;
+        if ($this->theme == '') {
+            $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/theme';
+        } else {
+            $this->theme_dir = rtrim($this->cntr->get('syrus.template_dir'), '/') . '/themes/' . $this->theme;
+        }
         $this->tag_namespaces = $this->cntr->get('syrus.tag_namespaces');
 
     }
@@ -129,7 +133,7 @@ class Tags
     {
 
         // Get filename and cache key to check
-        if ($this->theme != '' && file_exists($this->theme_dir . '/tags.txt')) { 
+        if (file_exists($this->theme_dir . '/tags.txt')) { 
             $cache_key = 'theme.' . $this->theme . '.tags';
             $tag_file = $this->theme_dir . '/tags.txt';
         } else { 
