@@ -16,7 +16,7 @@ class VarContainer
 {
 
     // Properties
-    private array $vars = [];
+    public array $vars = [];
     private array $blocks = [];
     private array $callouts = [];
     private string $callout_type = 'success';
@@ -60,6 +60,7 @@ class VarContainer
             $this->vars[$name] = $value;
             $this->debugger?->addItem('syrus.vars', [$k, $v]);
         }
+
     }
 
     /**
