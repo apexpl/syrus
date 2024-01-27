@@ -22,9 +22,8 @@ class Common
             '_orig' => trim($string)
         ];
 
-
         // Parse attributes
-        preg_match_all("/(.+?)=\"(.+?)(\"|$)/", $string, $attr_match, PREG_SET_ORDER);
+        preg_match_all("/(.+?)=\"(.*?)(\"|$)/", $string, $attr_match, PREG_SET_ORDER);
         foreach ($attr_match as $match) { 
             $attr[trim($match[1])] = trim($match[2], '"');
         }
