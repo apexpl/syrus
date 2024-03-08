@@ -76,6 +76,13 @@ return [
     'syrus.recaptcha_secret_key' => '',
 
     /**
+     * If using <s:hcaptch> tag, the reCaptcha site and secret keys.
+     */
+    'syrus.hcaptcha_site_key' => '',
+    'syrus.hcaptcha_secret_key' => '',
+
+
+    /**
      * Use Cluster.  If enabled and if apex/cluster is installed, will dispatch a RPC call for every template parsed, providing horizontal scaling.
      */
     'syrus.use_cluster' => false, 
