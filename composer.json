@@ -20,7 +20,7 @@
         "symfony/string": "^6.0 | ^7.0",
         "psr/cache": "^1.0 | ^2.0",
         "apex/container": "^2.0", 
-        "league/uri": "^7.3", 
+        "league/uri": "^6.0 | ^7.3", 
         "brick/phonenumber": "^0.4",
         "michelf/php-markdown": "^2.0"
     },
