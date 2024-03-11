@@ -121,7 +121,8 @@ class Templates
         }
 
         // Check require_http_method if necessary
-        $require_http_method = $this->cntr->get('syrus.require_http_method') ?? false;
+        //$require_http_method = $this->cntr->get('syrus.require_http_method') ?? false;
+        $require_http_method = false;
         if ($require_http_method === true && (!method_exists($obj, strtolower($method))) && (!method_exists($obj, 'render'))) {
             $this->syrus->setTemplateFile('404', true);
         }
